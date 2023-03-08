@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>Report</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date"><br><br>
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date"><br><br>
+        <input type="submit" value="Generate Report">
+    </form>
+    {% if report %}
+        <h1>Report for Retailer {{retailer}}</h1>
+        <p>Period: {{ start_date }} to {{ end_date }}</p>
+        <table border="4" id="report">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Purchased Amount</th>
+                    <th>Purchased Qty</th>
+                    <th>Sold Amount</th>
+                    <th>Sold Qty</th>
+                    <th>Profit</th>
+                    <th>In Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in report %}
+                    <tr>
+                        <td>{{ product.product_name }}</td>
+                        <td>${{ product.total_purchased_amount }}</td>
+                        <td>{{ product.total_purchased_quantity }}</td>
+                        <td>{{ product.total_sold_amount }}</td>
+                        <td>{{ product.total_sold_quantity }}</td>
+                        <td>{{ product.profit_loss }}</td>
+                        <td>{{ product.stock_in_hand }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
